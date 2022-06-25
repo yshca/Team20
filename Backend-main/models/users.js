@@ -40,11 +40,7 @@ const studentSchema = new Schema(
           default: 0,
         }
       }
-    ],
-    section:{
-      type:String,
-      required:true,
-    }
+    ]
   });
 
 var Student = mongoose.model('User', studentSchema);

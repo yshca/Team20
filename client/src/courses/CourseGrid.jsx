@@ -1,0 +1,95 @@
+import React, {Component} from 'react'
+import { Row, Col, Chip } from 'mdbreact';
+import { list } from './api-course'
+import auth from '../auth/auth-helper.js'
+
+class CourseGrid extends Component {
+  
+  state = {
+    courses: [],
+    open: false,
+    userId: '', 
+    gridMessage: '', 
+    courseLink: '', 
+    role: ''
+  }  
+
+  componentDidMount = () => {
+    this.loadCourses()
+  }
+
+  loadCourses = () => {
+
+    const jwt = auth.isAuthenticated()
+    this.setState({userId: jwt.user._id})
+    this.setState({role: jwt.user.role})
+
+    if (jwt.user.role === "Teacher") {
+      list().then((courses) => {
+        let teacherCourses = []
+        
+        for (let i=0; i<courses.length; i++) {
+          if (courses[i].instructor === jwt.user._id) {
+            teacherCourses.push(courses[i])
+          }
+        }
+        if (teacherCourses.length === 0) {
+          this.setState({gridMessage: "Create your first course to get started!"})
+        }
+        else {
+          this.setState({courses: teacherCourses})
+        }
+      })
+    }
+    else if (jwt.user.role === "Student") {
+      list().then((courses) => {
+          let studentCourses = []
+          for (let i=0; i<courses.length; i++) {
+            if (courses[i].students.includes(this.state.userId)) {
+              studentCourses.push(courses[i])
+            }
+          }
+          this.setState({courses: studentCourses})          
+          if (studentCourses.length === 0) {
+            this.setState({gridMessage: "Enroll in class to get started!"})
+          }
+      })
+    }
+    else {
+      this.setState({gridMessage: "Error loading courses. No role set."})
+      console.log("Error. No role set.")
+    }
+  }
+
+  render() {
+
+    return (
+      <div>
+          <Row>  
+          { this.state.courses.length > 0    
+            ? <Col>
+              <div className="m-4">
+                {this.state.courses.map((course, i) => { 
+                  const photoUrl = course.photo
+                  ? `/api/courses/photo/${this.state.course._id}?${new Date().getTime()}`
+                  : '/api/courses/defaultphoto'
+                  return <div className="d-flex-column d-wrap align-items-center" key={i}>
+                            <a href={'courses/'+ course._id}><Chip className="justify-content-center z-depth-1-half" bgColor="cyan" text="white" size="lg" src={photoUrl} alt="Courses" waves>{course.title}</Chip></a>
+                        </div>
+                })}
+              </div>
+              </Col>
+            :  <Col>
+                  <div className="text-center m-2">
+                     <h5>{this.state.gridMessage}</h5>
+                  </div>
+              </Col>
+            }
+          </Row>        
+    </div>
+    )}
+  }
+
+
+export default CourseGrid;
+ 

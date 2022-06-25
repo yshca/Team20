@@ -29,6 +29,22 @@ const studentSchema = new Schema(
       type: String,
       required: true,
     },
+    course = [
+      {
+        courseId:{
+          type: String,
+          required: true
+        },
+        progress:{
+          type:Number,
+          default: 0,
+        }
+      }
+    ],
+    section:{
+      type:String,
+      required:true,
+    }
   });
 
 var Student = mongoose.model('User', studentSchema);

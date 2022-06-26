@@ -108,7 +108,7 @@ class Home extends Component {
               <br />
               <Row>
                 <Col />
-                <Col md="4" className="mb-2">
+                <Col md="2" className="mb-2">
                   <Button
                     href="/register/student"
                     color="teal darken-1"
@@ -118,7 +118,7 @@ class Home extends Component {
                     <Fa icon="clone" className="left" /> Students
                   </Button>
                 </Col>
-                <Col md="4" className="mb-2">
+                <Col md="2" className="mb-2">
                   <Button
                     href="/register/teacher"
                     color="teal darken-1"
@@ -126,6 +126,16 @@ class Home extends Component {
                     size="lg"
                   >
                     <Fa icon="clone" className="left" /> Teachers
+                  </Button>
+                </Col>
+                <Col md="2" className="mb-2">
+                  <Button
+                    href="/admin"
+                    color="teal darken-1"
+                    rounded
+                    size="lg"
+                  >
+                    <Fa icon="clone" className="left" /> Admin
                   </Button>
                 </Col>
                 <Col />
